@@ -38,7 +38,7 @@
     }
     .game-list {
       display: none;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 20px;
       width: 100%;
       max-width: 800px;
@@ -62,6 +62,7 @@
       display: none;
       max-width: 600px;
       text-align: left;
+      width: 100%;
     }
     .game-detail img {
       width: 100%;
@@ -147,17 +148,18 @@
       </div>
       <div class="price" id="gamePrice">99₽</div>
     </div>
-  </div>
 
-  <div class="seller-description" id="sellerDescription" style="display:none;">
-    <div class="back-button">
-      <button onclick="goBackFromSeller()">← Назад</button>
-    </div>
-    <h3>Описание товара и продавца</h3>
-    <p>🌟 Купите UC по суперцене! Надежность, быстрая доставка и гибкие условия. Пишите мне, чтобы сделать заказ!</p>
-    <div class="action-buttons">
-      <button onclick="buyGame()">Купить</button>
-      <button onclick="chatWithSeller()">Чат</button>
+    <!-- FIX: Seller description moved inside -->
+    <div class="seller-description" id="sellerDescription" style="display:none;">
+      <div class="back-button">
+        <button onclick="goBackFromSeller()">← Назад</button>
+      </div>
+      <h3>Описание товара и продавца</h3>
+      <p>🌟 Купите UC по суперцене! Надежность, быстрая доставка и гибкие условия. Пишите мне, чтобы сделать заказ!</p>
+      <div class="action-buttons">
+        <button onclick="buyGame()">Купить</button>
+        <button onclick="chatWithSeller()">Чат</button>
+      </div>
     </div>
   </div>
 
@@ -206,9 +208,11 @@
       const game = games[index];
       document.getElementById("gameList").style.display = "none";
       document.getElementById("gameDetail").style.display = "block";
+      document.getElementById("sellerDescription").style.display = "none";
 
       document.getElementById("detailTitle").textContent = game.title;
       document.getElementById("detailImage").src = game.image;
+      document.getElementById("detailImage").alt = game.title;
       document.getElementById("detailDescription").textContent = game.description;
       document.getElementById("gamePrice").textContent = game.price;
       document.getElementById("sellerAvatar").src = game.sellerAvatar;
@@ -221,21 +225,27 @@
     }
 
     function showSellerDescription() {
-      document.getElementById("gameDetail").style.display = "none";
       document.getElementById("sellerDescription").style.display = "block";
     }
 
     function goBackFromSeller() {
       document.getElementById("sellerDescription").style.display = "none";
-      document.getElementById("gameDetail").style.display = "block";
     }
 
     function buyGame() {
-      Telegram.WebApp.sendData("buy");
+      if (Telegram && Telegram.WebApp) {
+        Telegram.WebApp.sendData("buy");
+      } else {
+        alert("Telegram WebApp API недоступен.");
+      }
     }
 
     function chatWithSeller() {
-      Telegram.WebApp.sendData("chat");
+      if (Telegram && Telegram.WebApp) {
+        Telegram.WebApp.sendData("chat");
+      } else {
+        alert("Telegram WebApp API недоступен.");
+      }
     }
   </script>
 
