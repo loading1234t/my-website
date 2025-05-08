@@ -182,7 +182,7 @@
 
     <div class="seller-info" onclick="showSellerDescription()">
       <div class="seller-info-left">
-        <img id="sellerAvatar" class="avatar" src="avatar.jpg" alt="Avatar">
+        <img id="sellerAvatar" class="avatar" src="" alt="Avatar">
         <span class="rating" id="sellerRating">★ 4.8</span>
       </div>
       <div class="price" id="gamePrice">99₽</div>
@@ -300,6 +300,10 @@
       document.getElementById("gameList").style.display = "none";
       document.getElementById("gameDetail").style.display = "none";
       document.getElementById("profileSection").style.display = "block";
+      Telegram.WebApp.getUser().then((user) => {
+        document.getElementById("userPhoto").src = user.photo_url;
+        document.getElementById("userName").textContent = user.first_name;
+      });
     }
 
     function goBackToMenu() {
