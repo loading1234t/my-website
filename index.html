@@ -148,15 +148,15 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: #00bfff;
+      background-color: #007bff;
       border-radius: 50%;
       width: 60px;
       height: 60px;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
     .support-button img {
       width: 30px;
@@ -165,12 +165,6 @@
   </style>
 </head>
 <body>
-  <div id="themeToggle" onclick="toggleTheme()">🌞/🌚</div>
-
-<input type="text" id="searchInput" placeholder="Поиск игр..." oninput="filterGames()" />
-
-<div id="mainMenu">...</div>
-<div id="gameList">...</div>
   <div class="nav-buttons" id="mainMenu">
     <button onclick="openMarket()">Маркет</button>
     <button onclick="openProfile()">Профиль</button>
@@ -221,9 +215,8 @@
     </div>
   </div>
 
-  <!-- Кнопка поддержки -->
-  <div class="support-button" onclick="openSupportChat()">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Telegram_Logo_2019.png" alt="Support Icon">
+  <div class="support-button" onclick="openTelegramChat()">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Telegram_icon_%282019%29.svg/1200px-Telegram_icon_%282019%29.svg.png" alt="Support Icon">
   </div>
 
   <script>
@@ -269,67 +262,62 @@
       list.innerHTML = games.map((game, i) => `
         <div class="game" onclick="showGameDetail(${i})">
           <img src="${game.image}" alt="${game.title}">
-<h3>${game.title}</h3>
-</div>
-`).join('');
-list.style.display = "grid";
-}
-function openProfile() {
-  document.getElementById("mainMenu").style.display = "none";
-  document.getElementById("gameList").style.display = "none";
-  const profile = document.getElementById("profileSection");
-  const tg = window.Telegram.WebApp;
-  if (tg && tg.initDataUnsafe.user) {
-    const user = tg.initDataUnsafe.user;
-    document.getElementById("userName").textContent = user.first_name + (user.last_name ? " " + user.last_name : "");
-    document.getElementById("userPhoto").src = user.photo_url || "avatar.jpg";
-  }
-  profile.style.display = "block";
-}
+          <h3>${game.title}</h3>
+        </div>
+      `).join("");
+      list.style.display = "grid";
+    }
 
-function goBackToMenu() {
-  document.getElementById("profileSection").style.display = "none";
-  document.getElementById("mainMenu").style.display = "block";
-}
+    function showGameDetail(index) {
+      const game = games[index];
+      document.getElementById("gameList").style.display = "none";
+      document.getElementById("gameDetail").style.display = "block";
+      document.getElementById("sellerDescription").style.display = "none";
+      document.getElementById("detailTitle").textContent = game.title;
+      document.getElementById("detailImage").src = game.image;
+      document.getElementById("detailImage").alt = game.title;
+      document.getElementById("detailDescription").textContent = game.description;
+      document.getElementById("gamePrice").textContent = game.price;
+      document.getElementById("sellerAvatar").src = game.sellerAvatar;
+      document.getElementById("sellerRating").textContent = game.rating;
+    }
 
-function showGameDetail(index) {
-  const game = games[index];
-  document.getElementById("gameList").style.display = "none";
-  document.getElementById("gameDetail").style.display = "block";
-  document.getElementById("detailImage").src = game.image;
-  document.getElementById("detailTitle").textContent = game.title;
-  document.getElementById("detailDescription").textContent = game.description;
-  document.getElementById("gamePrice").textContent = game.price;
-  document.getElementById("sellerAvatar").src = game.sellerAvatar;
-  document.getElementById("sellerRating").textContent = game.rating;
-}
+    function goBackToMarket() {
+      document.getElementById("gameDetail").style.display = "none";
+      document.getElementById("gameList").style.display = "grid";
+    }
 
-function goBackToMarket() {
-  document.getElementById("gameDetail").style.display = "none";
-  document.getElementById("sellerDescription").style.display = "none";
-  document.getElementById("gameList").style.display = "grid";
-}
+    function showSellerDescription() {
+      document.getElementById("sellerDescription").style.display = "block";
+    }
 
-function showSellerDescription() {
-  document.getElementById("sellerDescription").style.display = "block";
-}
+    function hideSellerDescription() {
+      document.getElementById("sellerDescription").style.display = "none";
+    }
 
-function hideSellerDescription() {
-  document.getElementById("sellerDescription").style.display = "none";
-}
+    function openProfile() {
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("gameList").style.display = "none";
+      document.getElementById("gameDetail").style.display = "none";
+      document.getElementById("profileSection").style.display = "block";
+    }
 
-function buyGame() {
-  Telegram.WebApp.sendData("buy");
-}
+    function goBackToMenu() {
+      document.getElementById("profileSection").style.display = "none";
+      document.getElementById("mainMenu").style.display = "block";
+    }
 
-function chatWithSeller() {
-  Telegram.WebApp.sendData("chat");
-}
+    function buyGame() {
+      Telegram.WebApp.sendData("buy");
+    }
 
-function openSupportChat() {
-  window.open("https://t.me/Dma12r", "_blank");
-}</script>
+    function chatWithSeller() {
+      Telegram.WebApp.sendData("chat");
+    }
 
- </body> 
- </html>
-
+    function openTelegramChat() {
+      window.open("https://t.me/Dma12r", "_blank");
+    }
+  </script>
+</body>
+</html>
