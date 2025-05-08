@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -104,8 +104,15 @@
       display: flex;
       justify-content: center;
       gap: 15px;
+      flex-wrap: wrap;
     }
-    /* Новый стиль для профиля */
+    .seller-description {
+      display: none;
+      background-color: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
     .profile {
       display: none;
       text-align: center;
@@ -126,30 +133,12 @@
   </style>
 </head>
 <body>
-
   <div class="nav-buttons" id="mainMenu">
     <button onclick="openMarket()">Маркет</button>
     <button onclick="openProfile()">Профиль</button>
   </div>
 
-  <div class="game-list" id="gameList">
-    <div class="game" onclick="showGameDetail(0)">
-      <img src="Pubg.jpg" alt="PUBG">
-      <h3>PUBG Mobile</h3>
-    </div>
-    <div class="game" onclick="showGameDetail(1)">
-      <img src="Free_Fire.jpg" alt="Free Fire">
-      <h3>Free Fire</h3>
-    </div>
-    <div class="game" onclick="showGameDetail(2)">
-      <img src="Mobile_Legends.jpg" alt="Mobile Legends">
-      <h3>Mobile Legends</h3>
-    </div>
-    <div class="game" onclick="showGameDetail(3)">
-      <img src="COD_Mobile.jpg" alt="COD Mobile">
-      <h3>Call of Duty: Mobile</h3>
-    </div>
-  </div>
+  <div class="game-list" id="gameList"></div>
 
   <div class="game-detail" id="gameDetail">
     <div class="back-button">
@@ -167,9 +156,9 @@
       <div class="price" id="gamePrice">99₽</div>
     </div>
 
-    <div class="seller-description" id="sellerDescription" style="display:none;">
+    <div class="seller-description" id="sellerDescription">
       <div class="back-button">
-        <button onclick="goBackFromSeller()">← Назад</button>
+        <button onclick="hideSellerDescription()">← Назад</button>
       </div>
       <h3>Описание товара и продавца</h3>
       <p>🌟 Купите UC по суперцене! Надежность, быстрая доставка и гибкие условия. Пишите мне, чтобы сделать заказ!</p>
@@ -180,7 +169,6 @@
     </div>
   </div>
 
-  <!-- Профиль пользователя -->
   <div class="profile" id="profileSection">
     <div class="back-button">
       <button onclick="goBackToMenu()">← Назад</button>
@@ -233,7 +221,15 @@
 
     function openMarket() {
       document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("gameList").style.display = "grid";
+      document.getElementById("profileSection").style.display = "none";
+      const list = document.getElementById("gameList");
+      list.innerHTML = games.map((game, i) => `
+        <div class="game" onclick="showGameDetail(${i})">
+          <img src="${game.image}" alt="${game.title}">
+          <h3>${game.title}</h3>
+        </div>
+      `).join("");
+      list.style.display = "grid";
     }
 
     function showGameDetail(index) {
@@ -241,7 +237,6 @@
       document.getElementById("gameList").style.display = "none";
       document.getElementById("gameDetail").style.display = "block";
       document.getElementById("sellerDescription").style.display = "none";
-
       document.getElementById("detailTitle").textContent = game.title;
       document.getElementById("detailImage").src = game.image;
       document.getElementById("detailImage").alt = game.title;
@@ -260,37 +255,20 @@
       document.getElementById("sellerDescription").style.display = "block";
     }
 
-    function goBackFromSeller() {
+    function hideSellerDescription() {
       document.getElementById("sellerDescription").style.display = "none";
     }
 
-    function buyGame() {
-      if (Telegram && Telegram.WebApp) {
-        Telegram.WebApp.sendData("buy");
-      } else {
-        alert("Telegram WebApp API недоступен.");
-      }
-    }
-
-    function chatWithSeller() {
-      if (Telegram && Telegram.WebApp) {
-        Telegram.WebApp.sendData("chat");
-      } else {
-        alert("Telegram WebApp API недоступен.");
-      }
-    }
-
-    // Функция для открытия профиля
     function openProfile() {
-      const user = Telegram.WebApp.initDataUnsafe?.user;
-      if (user) {
-        document.getElementById("mainMenu").style.display = "none";
-        document.getElementById("profileSection").style.display = "block";
-        document.getElementById("userName").textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-        document.getElementById("userPhoto").src = user.photo_url || "avatar.jpg";
-        document.getElementById("userPhoto").src = user.photo_url || 'avatar.jpg';
-      } else {
-        alert("Профиль недоступен.");
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("gameList").style.display = "none";
+      document.getElementById("gameDetail").style.display = "none";
+      document.getElementById("profileSection").style.display = "block";
+
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        document.getElementById("userName").textContent = tg.initDataUnsafe?.user?.first_name || "Пользователь";
+        document.getElementById("userPhoto").src = tg.initDataUnsafe?.user?.photo_url || "avatar.jpg";
       }
     }
 
@@ -298,9 +276,14 @@
       document.getElementById("profileSection").style.display = "none";
       document.getElementById("mainMenu").style.display = "block";
     }
+
+    function buyGame() {
+      Telegram.WebApp.sendData("buy");
+    }
+
+    function chatWithSeller() {
+      Telegram.WebApp.sendData("chat");
+    }
   </script>
 </body>
 </html>
-
-
-
