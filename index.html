@@ -1,68 +1,291 @@
+Фотки, [5/8/2025 1:50 PM]
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Добавить товар</title>
+  <title>Game Market</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      background-color: #0e0e0e;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-y: auto;
       padding: 20px;
     }
-    input, select, textarea {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+    .nav-buttons, .back-button {
+      margin: 20px 0;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 18px;
+      padding: 12px 25px;
+      font-size: 16px;
       border: none;
       border-radius: 10px;
+      background: linear-gradient(90deg, #6f42c1, #007bff);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #007bff, #6f42c1);
+    }
+    .game-list {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 800px;
+    }
+    .game {
+      background-color: #1c1c1c;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .game img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .game h3 {
+      font-size: 16px;
+    }
+    .game-detail {
+      display: none;
+      max-width: 600px;
+      text-align: left;
+      width: 100%;
+    }
+    .game-detail img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .seller-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1c1c1c;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .seller-info-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .rating {
+      font-size: 14px;
+      color: #ffcc00;
+    }
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #00ff88;
+    }
+    .action-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .seller-description {
+      display: none;
+      background-color: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .profile {
+      display: none;
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+    .profile img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+    .profile button {
+      width: 100%;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <h2>Добавить товар</h2>
+  <div class="nav-buttons" id="mainMenu">
+    <button onclick="openMarket()">Маркет</button>
+    <button onclick="openProfile()">Профиль</button>
+  </div>
 
-  <label for="game">Игра</label>
-  <select id="game">
-    <option value="Valorant">Valorant</option>
-    <option value="CS2">CS2</option>
-    <option value="Dota 2">Dota 2</option>
-    <option value="Fortnite">Fortnite</option>
-  </select>
+  <div class="game-list" id="gameList"></div>
 
-  <label for="description">Описание</label>
-  <textarea id="description" placeholder="Введите описание товара..." rows="4"></textarea>
+  <div class="game-detail" id="gameDetail">
+    <div class="back-button">
+      <button onclick="goBack()">← Назад</button>
+    </div>
+    <img id="detailImage" src="" alt="Game Image">
+    <h2 id="detailTitle"></h2>
+    <p id="detailDescription"></p>
 
-  <label for="price">Цена (₽)</label>
-  <input type="number" id="price" placeholder="Например: 500">
+    <div class="seller-info" onclick="showSellerDescription()">
+      <div class="seller-info-left">
+        <img id="sellerAvatar" class="avatar" src="avatar.jpg" alt="Avatar">
+        <span class="rating" id="sellerRating">★ 4.8</span>
+      </div>
+      <div class="price" id="gamePrice">99₽</div>
+    </div>
 
-  <label for="quantity">Количество</label>
-  <input type="number" id="quantity" placeholder="Например: 10">
+Фотки, [5/8/2025 1:50 PM]
+<div class="seller-description" id="sellerDescription">
+      <div class="back-button">
+        <button onclick="hideSellerDescription()">← Назад</button>
+      </div>
+      <h3>Описание товара и продавца</h3>
+      <p>🌟 Купите UC по суперцене! Надежность, быстрая доставка и гибкие условия. Пишите мне, чтобы сделать заказ!</p>
+      <div class="action-buttons">
+        <button onclick="buyGame()">Купить</button>
+        <button onclick="chatWithSeller()">Чат</button>
+      </div>
+    </div>
+  </div>
 
-  <button onclick="sendData()">Добавить товар</button>
+  <div class="profile" id="profileSection">
+    <div class="back-button">
+      <button onclick="goBackToMenu()">← Назад</button>
+    </div>
+    <img id="userPhoto" class="avatar" src="" alt="User Photo">
+    <h2 id="userName">Имя пользователя</h2>
+    <div class="action-buttons">
+      <button onclick="alert('Внести деньги')">💰 Внести</button>
+      <button onclick="alert('Вывести деньги')">💸 Вывести</button>
+      <button onclick="alert('История покупок')">📜 История</button>
+      <button onclick="alert('Поддержка')">🛠 Поддержка</button>
+    </div>
+  </div>
 
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+    const games = [
+      {
+        title: "PUBG Mobile",
+        image: "Pubg.jpg",
+        description: "Популярный мобильный шутер с королевской битвой.",
+        price: "99₽",
+        sellerAvatar: "avatar.jpg",
+        rating: "★ 4.8"
+      },
+      {
+        title: "Free Fire",
+        image: "Free_Fire.jpg",
+        description: "Экшн игра с короткими матчами и быстрой динамикой.",
+        price: "89₽",
+        sellerAvatar: "avatar.jpg",
+        rating: "★ 4.7"
+      },
+      {
+        title: "Mobile Legends",
+        image: "Mobile_Legends.jpg",
+        description: "MOBA на мобилке с множеством героев и быстрой игрой.",
+        price: "109₽",
+        sellerAvatar: "avatar.jpg",
+        rating: "★ 4.9"
+      },
+      {
+        title: "Call of Duty: Mobile",
+        image: "COD_Mobile.jpg",
+        description: "Мобильная версия знаменитого шутера с мультиплеером.",
+        price: "129₽",
+        sellerAvatar: "avatar.jpg",
+        rating: "★ 5.0"
+      }
+    ];
 
-    function sendData() {
-      const game = document.getElementById("game").value;
-      const description = document.getElementById("description").value;
-      const price = document.getElementById("price").value;
-      const quantity = document.getElementById("quantity").value;
+    function openMarket() {
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("profileSection").style.display = "none";
+      const list = document.getElementById("gameList");
+      list.innerHTML = games.map((game, i) => `
+        <div class="game" onclick="showGameDetail(${i})">
+          <img src="${game.image}" alt="${game.title}">
+          <h3>${game.title}</h3>
+        </div>
+      `).join("");
+      list.style.display = "grid";
+    }
 
-      const data = { game, description, price, quantity };
-      tg.sendData(JSON.stringify(data));
-      tg.close();
+    function showGameDetail(index) {
+      const game = games[index];
+      document.getElementById("gameList").style.display = "none";
+      document.getElementById("gameDetail").style.display = "block";
+      document.getElementById("sellerDescription").style.display = "none";
+      document.getElementById("detailTitle").textContent = game.title;
+      document.getElementById("detailImage").src = game.image;
+      document.getElementById("detailImage").alt = game.title;
+      document.getElementById("detailDescription").textContent = game.description;
+      document.getElementById("gamePrice").textContent = game.price;
+      document.getElementById("sellerAvatar").src = game.sellerAvatar;
+      document.getElementById("sellerRating").textContent = game.rating;
+    }
+
+    function goBack() {
+      document.getElementById("gameDetail").style.display = "none";
+      document.getElementById("gameList").style.display = "grid";
+    }
+
+    function showSellerDescription() {
+      document.getElementById("sellerDescription").style.display = "block";
+    }
+
+    function hideSellerDescription() {
+      document.getElementById("sellerDescription").style.display = "none";
+    }
+
+    function openProfile() {
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("gameList").style.display = "none";
+      document.getElementById("gameDetail").style.display = "none";
+      document.getElementById("profileSection").style.display = "block";
+
+Фотки, [5/8/2025 1:50 PM]
+const tg = window.Telegram?.WebApp;
+      if (tg) {
+        document.getElementById("userName").textContent = tg.initDataUnsafe?.user?.first_name  "Пользователь";
+        document.getElementById("userPhoto").src = tg.initDataUnsafe?.user?.photo_url  "avatar.jpg";
+      }
+    }
+
+    function goBackToMenu() {
+      document.getElementById("profileSection").style.display = "none";
+      document.getElementById("mainMenu").style.display = "block";
+    }
+
+    function buyGame() {
+      Telegram.WebApp.sendData("buy");
+    }
+
+    function chatWithSeller() {
+      Telegram.WebApp.sendData("chat");
     }
   </script>
 </body>
