@@ -288,17 +288,19 @@
         document.getElementById("profileSection").style.display = "block";
         document.getElementById("userName").textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
         document.getElementById("userPhoto").src = user.photo_url || "avatar.jpg";
+        document.getElementById("userPhoto").src = user.photo_url || 'avatar.jpg';
       } else {
-        alert("Не удалось получить данные пользователя из Telegram.");
+        alert("Профиль недоступен.");
       }
     }
 
-    // Функция для возвращения в главное меню
     function goBackToMenu() {
       document.getElementById("profileSection").style.display = "none";
       document.getElementById("mainMenu").style.display = "block";
     }
   </script>
-
 </body>
 </html>
+
+
+
