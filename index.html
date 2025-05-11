@@ -301,27 +301,27 @@
       document.getElementById("gameDetail").style.display = "none";
       document.getElementById("profileSection").style.display = "block";
 
-      // Load user data from Telegram WebApp API
+      // Загружаем данные пользователя из Telegram WebApp API
       const user = Telegram.WebApp.initDataUnsafe;
-      document.getElementById("userName").textContent = user.first_name;
-      document.getElementById("userPhoto").src = user.photo_url;
+      document.getElementById("userName").textContent = user.first_name || "Имя пользователя";
+      document.getElementById("userPhoto").src = user.photo_url || "avatar.jpg"; // если нет фото, используем дефолтное
     }
 
     function goBackToMenu() {
       document.getElementById("profileSection").style.display = "none";
-      document.getElementById("mainMenu").style.display = "flex";
+      document.getElementById("mainMenu").style.display = "block";
     }
 
     function buyGame() {
-      alert("Игра куплена!");
+      alert("Ваш заказ оформлен.");
     }
 
     function chatWithSeller() {
-      alert("Чат с продавцом открыт!");
+      Telegram.WebApp.sendData("chat");
     }
 
     function openTelegramChat() {
-      Telegram.WebApp.openLink('https://t.me/your_bot'); // Замените на ссылку на чат
+      window.open("https://t.me/your_channel", "_blank");
     }
   </script>
 </body>
