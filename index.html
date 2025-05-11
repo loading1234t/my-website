@@ -3,164 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <title>Game Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
     body {
       font-family: Arial, sans-serif;
-      background-color: #0e0e0e;
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      overflow-y: auto;
-      padding: 20px;
+      margin: 0;
+      background: #f4f4f4;
     }
+
     .nav-buttons {
-      margin: 20px 0;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      background-color: #0088cc;
     }
-    button {
-      padding: 12px 25px;
-      font-size: 16px;
+
+    .nav-buttons button {
+      padding: 10px 20px;
       border: none;
-      border-radius: 10px;
-      background: linear-gradient(90deg, #6f42c1, #007bff);
-      color: white;
+      background-color: white;
+      color: #0088cc;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-    button:hover {
-      background: linear-gradient(90deg, #007bff, #6f42c1);
-    }
+
     .game-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      width: 100%;
-      max-width: 800px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 10px;
     }
+
     .game {
-      background-color: #1c1c1c;
-      padding: 15px;
+      background: white;
       border-radius: 10px;
-      text-align: center;
+      overflow: hidden;
       cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
     }
+
     .game img {
       width: 100%;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      height: auto;
     }
+
     .game h3 {
+      margin: 10px;
       font-size: 16px;
     }
-    .game-detail {
-      display: none;
-      max-width: 600px;
-      text-align: left;
-      width: 100%;
+
+    .game-detail, .seller-description, .profile {
+      padding: 15px;
     }
-    .game-detail img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 15px;
+
+    .back-button {
+      margin-bottom: 10px;
     }
-    .seller-info {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #1c1c1c;
-      padding: 10px;
-      border-radius: 10px;
-      margin-top: 20px;
+
+    .back-button button {
+      background: none;
+      border: none;
+      color: #0088cc;
+      font-size: 16px;
       cursor: pointer;
     }
+
+    .seller-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      cursor: pointer;
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
     .seller-info-left {
       display: flex;
       align-items: center;
-      gap: 10px;
     }
+
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      object-fit: cover;
+      margin-right: 10px;
     }
+
     .rating {
-      font-size: 14px;
-      color: #ffcc00;
+      font-weight: bold;
     }
+
     .price {
       font-size: 18px;
+      color: #008800;
       font-weight: bold;
-      color: #00ff88;
     }
+
     .action-buttons {
-      margin-top: 20px;
       display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 15px;
     }
-    .seller-description {
-      display: none;
-      background-color: #1c1c1c;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-    .profile {
-      display: none;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-    }
-    .profile img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
-    }
-    .profile button {
-      width: 100%;
-      margin: 10px 0;
-    }
-    .back-button {
-      margin-bottom: 20px;
-    }
-    .back-button button {
-      padding: 12px 25px;
+
+    .action-buttons button {
+      padding: 10px 20px;
       font-size: 16px;
-      border-radius: 10px;
-      background-color: #d9534f;
+      border: none;
+      border-radius: 5px;
+      background-color: #0088cc;
       color: white;
       cursor: pointer;
     }
-    .back-button button:hover {
-      background-color: #c9302c;
-    }
+
     .support-button {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #007bff;
+      bottom: 15px;
+      right: 15px;
+      width: 50px;
+      height: 50px;
+      background: white;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
+
     .support-button img {
       width: 30px;
       height: 30px;
+    }
+
+    h2, h3, p {
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -172,28 +154,28 @@
 
   <div class="game-list" id="gameList"></div>
 
-  <div class="game-detail" id="gameDetail">
+  <div class="game-detail" id="gameDetail" style="display: none;">
     <div class="back-button">
       <button onclick="goBackToMarket()">← Назад</button>
     </div>
-    <img id="detailImage" src="" alt="Game Image">
+    <img id="detailImage" src="" alt="Game Image" style="width: 100%; border-radius: 10px;">
     <h2 id="detailTitle"></h2>
     <p id="detailDescription"></p>
 
     <div class="seller-info" onclick="showSellerDescription()">
       <div class="seller-info-left">
         <img id="sellerAvatar" class="avatar" src="" alt="Avatar">
-        <span class="rating" id="sellerRating">★ 4.8</span>
+        <span class="rating" id="sellerRating"></span>
       </div>
-      <div class="price" id="gamePrice">99₽</div>
+      <div class="price" id="gamePrice"></div>
     </div>
 
-    <div class="seller-description" id="sellerDescription">
+    <div class="seller-description" id="sellerDescription" style="display: none;">
       <div class="back-button">
         <button onclick="hideSellerDescription()">← Назад</button>
       </div>
       <h3>Описание товара и продавца</h3>
-      <p>🌟 Купите UC по суперцене! Надежность, быстрая доставка и гибкие условия. Пишите мне, чтобы сделать заказ!</p>
+      <p id="sellerDescText">🌟 Купите UC по суперцене! Надежность, быстрая доставка и гибкие условия. Пишите мне, чтобы сделать заказ!</p>
       <div class="action-buttons">
         <button onclick="buyGame()">Купить</button>
         <button onclick="chatWithSeller()">Чат</button>
@@ -201,25 +183,37 @@
     </div>
   </div>
 
-  <div class="profile" id="profileSection">
+  <div class="profile" id="profileSection" style="display: none;">
     <div class="back-button">
       <button onclick="goBackToMenu()">← Назад</button>
     </div>
     <img id="userPhoto" class="avatar" src="" alt="User Photo">
     <h2 id="userName">Имя пользователя</h2>
     <div class="action-buttons">
-      <button onclick="alert('Внести деньги')">💰 Внести</button>
-      <button onclick="alert('Вывести деньги')">💸 Вывести</button>
-      <button onclick="alert('История покупок')">📜 История</button>
-      <button onclick="alert('Поддержка')">🛠 Поддержка</button>
+      <button onclick="alert('💰 Внести деньги')">💰 Внести</button>
+      <button onclick="alert('💸 Вывести деньги')">💸 Вывести</button>
+      <button onclick="alert('📜 История покупок')">📜 История</button>
+      <button onclick="alert('🛠 Поддержка')">🛠 Поддержка</button>
     </div>
   </div>
 
   <div class="support-button" onclick="openTelegramChat()">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Telegram_icon_%282019%29.svg/1200px-Telegram_icon_%282019%29.svg.png" alt="Support Icon">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Telegram_icon_%282019%29.svg" alt="Support Icon">
   </div>
 
   <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    // Получаем данные пользователя
+    const user = tg.initDataUnsafe;
+    const userName = user?.user?.first_name || 'Пользователь';
+    const userPhoto = user?.user?.photo_url || 'avatar.jpg';
+
+    // Заполняем профиль
+    document.getElementById("userName").textContent = userName;
+    document.getElementById("userPhoto").src = userPhoto;
+
     const games = [
       {
         title: "PUBG Mobile",
@@ -255,9 +249,10 @@
       }
     ];
 
+    let selectedGame = null;
+
     function openMarket() {
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("profileSection").style.display = "none";
+      hideAll();
       const list = document.getElementById("gameList");
       list.innerHTML = games.map((game, i) => `
         <div class="game" onclick="showGameDetail(${i})">
@@ -269,22 +264,16 @@
     }
 
     function showGameDetail(index) {
-      const game = games[index];
-      document.getElementById("gameList").style.display = "none";
+      selectedGame = games[index];
+      hideAll();
       document.getElementById("gameDetail").style.display = "block";
+      document.getElementById("detailTitle").textContent = selectedGame.title;
+      document.getElementById("detailImage").src = selectedGame.image;
+      document.getElementById("detailDescription").textContent = selectedGame.description;
+      document.getElementById("gamePrice").textContent = selectedGame.price;
+      document.getElementById("sellerAvatar").src = selectedGame.sellerAvatar;
+      document.getElementById("sellerRating").textContent = selectedGame.rating;
       document.getElementById("sellerDescription").style.display = "none";
-      document.getElementById("detailTitle").textContent = game.title;
-      document.getElementById("detailImage").src = game.image;
-      document.getElementById("detailImage").alt = game.title;
-      document.getElementById("detailDescription").textContent = game.description;
-      document.getElementById("gamePrice").textContent = game.price;
-      document.getElementById("sellerAvatar").src = game.sellerAvatar;
-      document.getElementById("sellerRating").textContent = game.rating;
-    }
-
-    function goBackToMarket() {
-      document.getElementById("gameDetail").style.display = "none";
-      document.getElementById("gameList").style.display = "grid";
     }
 
     function showSellerDescription() {
@@ -295,32 +284,47 @@
       document.getElementById("sellerDescription").style.display = "none";
     }
 
+    function goBackToMarket() {
+      hideAll();
+      document.getElementById("gameList").style.display = "grid";
+    }
+
     function openProfile() {
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("gameList").style.display = "none";
-      document.getElementById("gameDetail").style.display = "none";
+      hideAll();
       document.getElementById("profileSection").style.display = "block";
-      Telegram.WebApp.getUser().then((user) => {
-        document.getElementById("userPhoto").src = user.photo_url;
-        document.getElementById("userName").textContent = user.first_name;
-      });
     }
 
     function goBackToMenu() {
-      document.getElementById("profileSection").style.display = "none";
-      document.getElementById("mainMenu").style.display = "block";
+      hideAll();
+      document.getElementById("mainMenu").style.display = "flex";
     }
 
     function buyGame() {
-      Telegram.WebApp.sendData("buy");
+      if (selectedGame) {
+        const orderId = Math.floor(Math.random() * 90000 + 10000);
+        tg.sendData(JSON.stringify({
+          action: "buy",
+          title: selectedGame.title,
+          price: selectedGame.price,
+          order_id: orderId
+        }));
+        alert(`Вы выбрали покупку: ${selectedGame.title}\nНомер заказа: #${orderId}`);
+      }
     }
 
     function chatWithSeller() {
-      Telegram.WebApp.sendData("chat");
+      tg.sendData("chat");
     }
 
     function openTelegramChat() {
-      window.open("https://t.me/Dma12r", "_blank");
+      tg.sendData("chat");
+    }
+
+    function hideAll() {
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("gameList").style.display = "none";
+      document.getElementById("gameDetail").style.display = "none";
+      document.getElementById("profileSection").style.display = "none";
     }
   </script>
 </body>
