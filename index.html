@@ -90,14 +90,14 @@
       border-radius: 50%;
       object-fit: cover;
     }
-    .rating {
-      font-size: 14px;
-      color: #ffcc00;
-    }
     .price {
       font-size: 18px;
       font-weight: bold;
       color: #00ff88;
+    }
+    .rating {
+      font-size: 14px;
+      color: #ffcc00;
     }
     .action-buttons {
       margin-top: 20px;
@@ -179,7 +179,6 @@
     <img id="detailImage" src="" alt="Game Image">
     <h2 id="detailTitle"></h2>
     <p id="detailDescription"></p>
-
     <div class="seller-info" onclick="showSellerDescription()">
       <div class="seller-info-left">
         <img id="sellerAvatar" class="avatar" src="avatar.jpg" alt="Avatar">
@@ -275,7 +274,6 @@
       document.getElementById("sellerDescription").style.display = "none";
       document.getElementById("detailTitle").textContent = game.title;
       document.getElementById("detailImage").src = game.image;
-      document.getElementById("detailImage").alt = game.title;
       document.getElementById("detailDescription").textContent = game.description;
       document.getElementById("gamePrice").textContent = game.price;
       document.getElementById("sellerAvatar").src = game.sellerAvatar;
@@ -299,12 +297,12 @@
       document.getElementById("mainMenu").style.display = "none";
       document.getElementById("gameList").style.display = "none";
       document.getElementById("gameDetail").style.display = "none";
+      const user = Telegram.WebApp.initDataUnsafe.user;
+      if (user) {
+        document.getElementById("userName").textContent = user.first_name + (user.last_name ? " " + user.last_name : "");
+        document.getElementById("userPhoto").src = user.photo_url || "default-avatar.jpg";
+      }
       document.getElementById("profileSection").style.display = "block";
-
-      // Загружаем данные пользователя из Telegram WebApp API
-      const user = Telegram.WebApp.initDataUnsafe;
-      document.getElementById("userName").textContent = user.first_name || "Имя пользователя";
-      document.getElementById("userPhoto").src = user.photo_url || "avatar.jpg"; // если нет фото, используем дефолтное
     }
 
     function goBackToMenu() {
@@ -312,17 +310,19 @@
       document.getElementById("mainMenu").style.display = "block";
     }
 
+    function openTelegramChat() {
+      Telegram.WebApp.sendData("chat");
+    }
+
     function buyGame() {
-      alert("Ваш заказ оформлен.");
+      Telegram.WebApp.sendData("buy");
     }
 
     function chatWithSeller() {
       Telegram.WebApp.sendData("chat");
     }
 
-    function openTelegramChat() {
-      window.open("https://t.me/your_channel", "_blank");
-    }
+    Telegram.WebApp.ready();
   </script>
 </body>
 </html>
